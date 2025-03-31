@@ -2,23 +2,42 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8" />
-  <title>顯示 Google Sheets 最新資料</title>
+  <title>Supabase 學生資料</title>
 </head>
 <body>
-  <h2>最新資料：</h2>
-  <div id="latestData">讀取中...</div>
+  <h2>學生名單</h2>
+  <ul id="studentList">載入中...</ul>
 
-  <script>
-    const url = "https://script.google.com/macros/s/AKfycbylQBhtMKFe78CkiWNoMSxQGeZ0y4jlZOGVU-QEhCECqxuV-1gvSQ2d6bQzTvMOtlVh/exec"; // 替換為您自己的 Web App URL
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        document.getElementById("latestData").innerText = data.latest;
-      })
-      .catch((err) => {
-        document.getElementById("latestData").innerText = "讀取錯誤：" + err;
+    // 替換為您自己的 Supabase 專案 URL 與 anon key
+    const supabaseUrl = "https://jwqomxsavhoeljtrtnld.supabase.co  ";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3cW9teHNhdmhvZWxqdHJ0bmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0MDkyOTQsImV4cCI6MjA1ODk4NTI5NH0.JlFkZ6_jKzUWF-N_pp223W0eOOEQztxPA_bIGNzbL4A";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    async function loadStudents() {
+      const { data, error } = await supabase
+        .from("students")
+        .select("*")
+        .order("id", { ascending: true });
+
+      const list = document.getElementById("studentList");
+      list.innerHTML = "";
+
+      if (error) {
+        list.innerHTML = `<li>錯誤：${error.message}</li>`;
+        return;
+      }
+
+      data.forEach((student) => {
+        const item = document.createElement("li");
+        item.textContent = `${student.name}：${student.score} 分`;
+        list.appendChild(item);
       });
+    }
+
+    loadStudents();
   </script>
 </body>
 </html>
