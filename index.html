@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>顯示 Google Sheets 最新資料</title>
+</head>
+<body>
+  <h2>最新資料：</h2>
+  <div id="latestData">讀取中...</div>
+
+  <script>
+    const url = "https://script.google.com/macros/s/AKfycbylQBhtMKFe78CkiWNoMSxQGeZ0y4jlZOGVU-QEhCECqxuV-1gvSQ2d6bQzTvMOtlVh/exec"; // 替換為您自己的 Web App URL
+
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        document.getElementById("latestData").innerText = data.latest;
+      })
+      .catch((err) => {
+        document.getElementById("latestData").innerText = "讀取錯誤：" + err;
+      });
+  </script>
+</body>
+</html>
