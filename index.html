@@ -6,13 +6,12 @@
 </head>
 <body>
   <h2>學生名單</h2>
-  <ul id="studentList">載入中...</ul>
+  <ul id="studentList">讀取中...</ul>
 
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    // 替換為您自己的 Supabase 專案 URL 與 anon key
-    const supabaseUrl = "https://jwqomxsavhoeljtrtnld.supabase.co  ";
+    const supabaseUrl = "https://jwqomxsavhoeljtrtnld.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3cW9teHNhdmhvZWxqdHJ0bmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0MDkyOTQsImV4cCI6MjA1ODk4NTI5NH0.JlFkZ6_jKzUWF-N_pp223W0eOOEQztxPA_bIGNzbL4A";
     const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -27,6 +26,12 @@
 
       if (error) {
         list.innerHTML = `<li>錯誤：${error.message}</li>`;
+        console.error(error);
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        list.innerHTML = "<li>目前沒有學生資料</li>";
         return;
       }
 
